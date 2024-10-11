@@ -381,7 +381,195 @@ ADD CONSTRAINT fk_account_number
 FOREIGN KEY(account_number)
 REFERENCES customers (account_number);
 
-#OCCUPANCIES LEFT
+ALTER TABLE occupancies
+ADD CONSTRAINT fk_employee1
+FOREIGN KEY(employee_id)
+REFERENCES employees (id);
+
+ALTER TABLE occupancies
+ADD CONSTRAINT fk_occupancies_account_number
+FOREIGN KEY(account_number)
+REFERENCES customers (account_number);
+
+ALTER TABLE occupancies
+ADD CONSTRAINT fk_room_number
+FOREIGN KEY(room_number)
+REFERENCES rooms (room_number);
+
+
+INSERT INTO `employees`
+(`id`, `first_name`, `last_name`, `title`)
+VALUES
+(1, 'Vladimir', 'Goychev', 'Consructor'),
+(2, 'Georgi','Ivanov', 'Cleaner'),
+(3, 'Pesho', 'Petrov', 'CEO');
+
+INSERT INTO `customers`
+(`account_number`, `first_name`, `last_name`, `phone_number`)
+VALUES
+(1, 'Stoyan', 'Ivanov', '+359881275497'),
+(2, 'Samanta','Kolarova', '+359123456789'),
+(3, 'Monika', 'Mincheva', '+35920594212');
+
+INSERT INTO `room_status`
+(`room_status`, `notes`)
+VALUES
+(1, 'booked'),
+(2, 'free'),
+(3, 'taken');
+
+INSERT INTO `room_types`
+(`room_type`, `notes`)
+VALUES
+(1, 'one-room'),
+(2, 'two-rooms'),
+(3, '3 rooms + king-size bed');
+
+INSERT INTO `bed_types`
+(`bed_type`, `notes`)
+VALUES
+(1, 'single'),
+(2, 'double'),
+(3, 'king-size');
+
+INSERT INTO `rooms`
+(`room_number`, `room_type`, `bed_type`, `rate`, `room_status`)
+VALUES
+(1, 3, 3, 10.0, 3),
+(2, 1,2, 5.0, 2),
+(3, 2, 1, 4.65, 1);
+
+INSERT INTO `payments`
+(`id`, `employee_id`, `account_number`, `total_days`, `amount_charged`)
+VALUES
+(1, 1, 3, 5, 450.00),
+(2, 2, 1, 3, 250.20),
+(3, 3, 2, 2, 180.65);
+
+INSERT INTO `occupancies`
+(`id`, `employee_id`, `date_occupied`, `account_number`, `room_number`)
+VALUES
+(1, 2, '2007/12/01', 1, 2),
+(2, 1, '2008/05/13', 3, 3),
+(3, 3, '2024/08/24', 2, 1);
+
+#Exercise 14
+CREATE database soft_uni;
+
+CREATE TABLE towns(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE addresses(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+address_text VARCHAR(70) NOT NULL,
+town_id INT NOT NULL
+);
+
+CREATE TABLE departments(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE employees(
+id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+first_name VARCHAR(45) NOT NULL,
+middle_name VARCHAR(45),
+last_name VARCHAR(45) NOT NULL,
+job_title VARCHAR(45) NOT NULL,
+department_id INT NOT NULL,
+hire_date DATE NOT NULL,
+salary DECIMAL(5,2) NOT NULL,
+address_id INT NOT NULL
+);
+
+ALTER TABLE addresses
+ADD CONSTRAINT fk_town_id
+FOREIGN KEY (town_id)
+REFERENCES towns (id);
+
+ALTER TABLE employees
+ADD CONSTRAINT fk_deparment_id
+FOREIGN KEY (department_id)
+REFERENCES departments (id);
+
+ALTER TABLE employees
+ADD CONSTRAINT fk_address_id
+FOREIGN KEY (address_id)
+REFERENCES addresses (id);
+
+#Exercise 15
+INSERT INTO `towns`
+(`id`, `name`)
+VALUES
+(1, 'Sofia'),
+(2, 'Plovdiv'),
+(3, 'Varna'),
+(4, 'Burgas');
+
+INSERT INTO `departments`
+(`id`, `name`)
+VALUES
+(1, 'Engineering'),
+(2, 'Sales'),
+(3, 'Marketing'),
+(4, 'Software Development'),
+(5, 'Quality Assurance');
+
+INSERT INTO `employees`
+(`id`, `first_name`, `middle_name`,`last_name`,`job_title`,`department_id`, `hire_date`, `salary`)
+VALUES
+(1, 'Ivan', 'Ivanov', 'Ivanov', '.NET DEVELOPER', 4, '2013-02-01',3500.00),
+(2, 'Petar', 'Petrov', 'Petrov', 'Senior Engineer', 1, '2004-03-02',4000.00),
+(3, 'Maria', 'Petrova', 'Ivanova', 'Intern', 5, '2016-08-28',525.25),
+(4, 'Georgi', 'Terziev', 'Ivanov', 'CEO', 2, '2007-12-09',3000.00),
+(5, 'Peter', 'Pan', 'Pan', 'Intern', 3, '2016-08-28',599.88);
+
+#Exercise 16
+SELECT * FROM towns;
+
+SELECT * FROM departments;
+
+SELECT * FROM employees;
+
+#Exercise 17
+SELECT * FROM towns 
+ORDER BY name;
+
+SELECT * FROM departments
+ORDER BY name;
+
+SELECT * FROM employees
+ORDER BY salary DESC;
+
+#Exercise 18
+SELECT name FROM towns;
+
+SELECT name FROM departments;
+
+SELECT first_name, last_name, job_title, salary FROM employees;
+
+#Exercise 19
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE employees
+SET salary = salary * 1.10;
+
+SET SQL_SAFE_UPDATES = 1;
+
+SELECT salary FROM employees;
+
+#Exercise 20
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE payments
+SET tax_rate = tax_rate * 0.03;
+
+SELECT tax_rate FROM payments;
+
+#Exercise 21
+TRUNCATE TABLE occupancies;
 
 
 
